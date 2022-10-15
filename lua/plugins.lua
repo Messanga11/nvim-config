@@ -1,3 +1,11 @@
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  vim.api.nvim_command('packadd packer.nvim')
+end
+
+
 local status, packer = pcall(require, "packer")
 if (not status) then
   print("Packer is not installed")
@@ -38,4 +46,7 @@ packer.startup(function(use)
   use 'tpope/vim-commentary'
   use 'tpope/vim-fugitive'
   use {'akinsho/flutter-tools.nvim', requires = 'nvim-lua/plenary.nvim'}
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
